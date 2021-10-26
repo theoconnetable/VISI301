@@ -1,4 +1,5 @@
 import pygame
+from aleatoire import aleatoire
 
 
 class Player:
@@ -29,13 +30,15 @@ class Player:
 
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, x1, y1):
         self.screen = screen
         self.running = True
         self.clock = pygame.time.Clock()
         self.player = Player(200, 200)
-        self.area = pygame.Rect(150, 80, 50, 50)
         self.area_color = "red"
+        self.image2 = pygame.image.load("star.png")
+        self.area = self.image2.get_rect(x=x1,y=y1)
+
 
     def handling_events(self):
         for event in pygame.event.get():
@@ -69,16 +72,18 @@ class Game:
     def update(self):
         self.player.move()
         if self.area.colliderect(self.player.rect):
-            self.area_color = "green"
-        else:
-            self.area_color = "red"
+            ##mettre score
+            ##Changer position sprite (creer var)
+        ##else: pas besoin pour le moment
+            score = 1
+
 
         #gravité
         self.player.velocity[1] += 0.05 * 9.81
 
     def display(self):
         self.screen.fill("black")
-        pygame.draw.rect(self.screen, self.area_color, self.area)
+        screen.blit(self.image2, self.area)
         self.player.draw(self.screen)
         pygame.display.flip()
 
@@ -93,7 +98,9 @@ class Game:
 
 pygame.init()
 screen = pygame.display.set_mode((1080, 720))
-game = Game(screen)
+x1 = aleatoire(1080,720)[0]
+y1 = aleatoire(1080,720)[1]
+game = Game(screen,x1,y1)
 game.run()
 
 pygame.quit()

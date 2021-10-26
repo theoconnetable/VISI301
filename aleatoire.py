@@ -6,6 +6,7 @@ Created on Wed Oct 13 17:19:22 2021
 """
 
 from random import *
+import pygame
 
 def aleatoire(max_width, max_height):
     """Fonction qui permet d'avoir une position aléatoire"""
@@ -14,4 +15,3 @@ def aleatoire(max_width, max_height):
     y = randint(0,max_height)
     
     return (x,y)
-    
