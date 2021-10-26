@@ -22,8 +22,8 @@ class Game:
         self.running = True
         self.clock = pygame.time.Clock()
         self.player = Player(0, 0)
-        self.area = pygame.Rect(150, 80, 50, 50)
-        self.area_color = "red"
+        self.image2 = pygame.image.load("lolo.jpg")
+        self.area = self.image2.get_rect(x=50, y=50)
 
     def handling_events(self):
         for event in pygame.event.get():
@@ -48,13 +48,13 @@ class Game:
     def update(self):
         self.player.move()
         if self.area.colliderect(self.player.rect):
-            self.area_color = "green"
-        else:
-            self.area_color = "red"
+            ##mettre score
+            ##Changer position sprite (creer var)
+        ##else: pas besoin pour le moment
 
     def display(self):
         self.screen.fill("black")
-        pygame.draw.rect(self.screen, self.area_color, self.area)
+        screen.blit(self.image2, self.area)
         self.player.draw(self.screen)
         pygame.display.flip()
 
