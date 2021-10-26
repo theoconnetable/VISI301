@@ -9,12 +9,15 @@ class Player:
         self.rect = self.image.get_rect(x=x, y=y)
         self.speed = 5
         self.velocity = [0, 0]
+        self.health = 100
+        self.max_health = 100
 
     def move(self):
         self.rect.move_ip(self.velocity[0] * self.speed, self.velocity[1] * self.speed)
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+        
 
 
 class Game:
@@ -64,6 +67,21 @@ class Game:
 
     def run(self):
         while self.running:
+            
+            #Gestion de la barre de vie 
+    def update_health_bar(surface):
+        #Couleru de la barre de vie
+        bar_color = (255,255,255) 
+        back_bar_color = (127,127,127)
+        
+        #position de la barre de vie 
+        bar_position = [x1+20,y1+20,50,10]
+        back_bar_position = [x1+20,y1+20,100,10]
+        
+        #dessiner la barre de vie
+        pygame.draw.rect(surface, back_bar_color, back_bar_position)
+        pygame.draw.rect(surface, bar_color, bar_position)
+        
             self.handling_events()
             self.update()
             self.display()
@@ -75,6 +93,7 @@ screen = pygame.display.set_mode((1080, 720))
 x1 = aleatoire(1080,720)[0]
 y1 = aleatoire(1080,720)[1]
 game = Game(screen,x1,y1)
-game.run()
+game.run()  
+Player.update_health_bar(screen)
 
 pygame.quit()
