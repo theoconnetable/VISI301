@@ -18,13 +18,14 @@ class Player:
 
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, x1, y1):
         self.screen = screen
         self.running = True
         self.clock = pygame.time.Clock()
         self.player = Player(0, 0)
         self.image2 = pygame.image.load("star.png")
-        self.area = self.image2.get_rect(aleatoire(1080,720))
+        self.area = self.image2.get_rect(aleatoire(x1,y1))
+
 
     def handling_events(self):
         for event in pygame.event.get():
@@ -54,6 +55,7 @@ class Game:
         ##else: pas besoin pour le moment
             score = 1
 
+
     def display(self):
         self.screen.fill("black")
         screen.blit(self.image2, self.area)
@@ -70,7 +72,9 @@ class Game:
 
 pygame.init()
 screen = pygame.display.set_mode((1080, 720))
-game = Game(screen)
+x1 = 180
+y1 = 80
+game = Game(screen,x1,y1)
 game.run()
 
 pygame.quit()
