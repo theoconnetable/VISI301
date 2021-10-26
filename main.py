@@ -1,4 +1,5 @@
 import pygame
+from aleatoire import aleatoire
 
 
 class Player:
@@ -22,8 +23,8 @@ class Game:
         self.running = True
         self.clock = pygame.time.Clock()
         self.player = Player(0, 0)
-        self.image2 = pygame.image.load("lolo.jpg")
-        self.area = self.image2.get_rect(x=50, y=50)
+        self.image2 = pygame.image.load("star.png")
+        self.area = self.image2.get_rect(aleatoire(1080,720))
 
     def handling_events(self):
         for event in pygame.event.get():
@@ -51,6 +52,7 @@ class Game:
             ##mettre score
             ##Changer position sprite (creer var)
         ##else: pas besoin pour le moment
+            score = 1
 
     def display(self):
         self.screen.fill("black")
