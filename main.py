@@ -17,13 +17,13 @@ class Player:
 
 
 class Game:
-    def __init__(self, screen):
+    def __init__(self, screen, x1, y1):
         self.screen = screen
         self.running = True
         self.clock = pygame.time.Clock()
         self.player = Player(0, 0)
-        self.image2 = pygame.image.load("lolo.jpg")
-        self.area = self.image2.get_rect(x=50, y=50)
+        self.image2 = pygame.image.load("star.png")
+        self.area = self.image2.get_rect(x=x1, y=y1)
 
     def handling_events(self):
         for event in pygame.event.get():
@@ -51,6 +51,8 @@ class Game:
             ##mettre score
             ##Changer position sprite (creer var)
         ##else: pas besoin pour le moment
+            score = 1
+
 
     def display(self):
         self.screen.fill("black")
@@ -68,7 +70,9 @@ class Game:
 
 pygame.init()
 screen = pygame.display.set_mode((1080, 720))
-game = Game(screen)
+x1 = 180
+y1 = 80
+game = Game(screen,x1,y1)
 game.run()
 
 pygame.quit()
