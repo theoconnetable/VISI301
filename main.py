@@ -24,7 +24,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.player = Player(0, 0)
         self.image2 = pygame.image.load("star.png")
-        self.area = self.image2.get_rect(aleatoire(x1,y1))
+        self.area = self.image2.get_rect(x=x1,y=y1)
 
 
     def handling_events(self):
@@ -72,8 +72,8 @@ class Game:
 
 pygame.init()
 screen = pygame.display.set_mode((1080, 720))
-x1 = 180
-y1 = 80
+x1 = aleatoire(1080,720)[0]
+y1 = aleatoire(1080,720)[1]
 game = Game(screen,x1,y1)
 game.run()
 
