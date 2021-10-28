@@ -6,16 +6,21 @@ class Player:
     #Le joueur
     
     def __init__(self, x, y):
-        #Initialisation du jouer : x,y : entiers (position du joueur en(x,y)
+         ##Initialisation du jouer : x,y : entiers (position du joueur en(x,y))
         self.image = pygame.image.load("ball.png")
-        self.image
+        ######################################################################-------------------------------------------------------------------------self.image
         self.rect = self.image.get_rect(x=x, y=y)
+        ##L'affichage du joueur est définie par la variable 'image'
+        ##Sa position ainsi que "hitbox" sont définies par 'rect'
         self.speed = 1
         self.velocity = [0, 0]
         self.health = 100
         self.max_health = 100
+        ##########################################################################-----Ajout commentaires
 
     def move(self):
+        ##Mouvement du joueur
+        ##########################################################################-----Ajout commentaires
         self.rect.move_ip(self.velocity[0] * self.speed, self.velocity[1] * self.speed)
         if self.rect.left < 0:
             self.velocity[0] = 0
@@ -31,28 +36,33 @@ class Player:
             self.rect.bottom = screen.get_height()
 
     def draw(self, screen):
+        ##Affichage du joueur
         screen.blit(self.image, self.rect)
 
 
-                #La barre de vie 
+    ##La barre de vie 
     def update_health_bar(self, screen):
-        #Couleur de la barre de vie + barre d'arrière plan
+        ##Couleur de la barre de vie + barre d'arrière plan
         bar_color = (255,255,255) 
         back_bar_color = (127,127,127)
         
-        #position de la barre de vie 
+        ##position de la barre de vie 
         bar_position = [100,100,50,10]
         back_bar_position = [20,20,100,10]
         
-        #dessiner la barre de vie
+        ##dessiner la barre de vie
         pygame.draw.rect(screen, back_bar_color, back_bar_position)
         pygame.draw.rect(screen, bar_color, bar_position)
         
 
 class star:
+    ##L'étoile
     def __init__(self,x1, y1):
+         ##Initialisation du jouer : x,y : entiers (position du joueur en(x1,y1))
         self.image2 = pygame.image.load("star.png")
         self.area = self.image2.get_rect(x=x1,y=y1)
+        ##L'affichage de l'étoile est définit par la variable 'image2'
+        ##Sa position ainsi que "hitbox" sont définies par 'area'
 
     def move(self):
         ####-----------------------if self.area.colliderect(self.player.rect):
@@ -66,17 +76,20 @@ class star:
 
             
 class Game:
+    ##Le jeu
 
     def __init__(self, screen):
+        ##Initialisation du jouer : x,y : entiers (position du joueur en(x,y))
         self.screen = screen
         self.running = True
         self.clock = pygame.time.Clock()
+        ##########################################################################-----Ajout commentaires
         self.player = Player(200, 200)
-        #
         self.star = star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
-        #
+        ##On definit les positions initiales du joueur et de l'étoile
         
     def handling_events(self):
+        ##Effectue les actions entrées par l'utilisteur (à l'aide du clavier/souris)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
