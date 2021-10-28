@@ -30,19 +30,19 @@ class Player:
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-                #Gestion de la barre de vie 
-    def update_health_bar(surface):
-        #Couleru de la barre de vie
+                #La barre de vie 
+    def update_health_bar(self, screen):
+        #Couleur de la barre de vie + barre d'arrière plan
         bar_color = (255,255,255) 
         back_bar_color = (127,127,127)
         
         #position de la barre de vie 
-        bar_position = [x1+20,y1+20,50,10]
-        back_bar_position = [x1+20,y1+20,100,10]
+        bar_position = [100,100,50,10]
+        back_bar_position = [20,20,100,10]
         
         #dessiner la barre de vie
-        pygame.draw.rect(surface, back_bar_color, back_bar_position)
-        pygame.draw.rect(surface, bar_color, bar_position)
+        pygame.draw.rect(screen, back_bar_color, back_bar_position)
+        pygame.draw.rect(screen, bar_color, bar_position)
         
 
 
@@ -62,7 +62,7 @@ class Game:
             if event.type == pygame.QUIT:
                 self.running = False
             if pygame.mouse.get_pressed()[0]:
-                print("appuyé")
+                #print("appuyé")
                 pygame.draw.line(self.screen, (255, 255, 255), (0, 0), (200, 200), 4)
             if event.type == pygame.MOUSEBUTTONUP:
                 self.player.velocity[0] = - (self.player.rect.centerx - pygame.mouse.get_pos()[0])/5
@@ -103,7 +103,8 @@ class Game:
         screen.blit(self.image2, self.area)
         self.player.draw(self.screen)
         pygame.display.flip()
-
+        self.player.update_health_bar(self.screen)
+        
     def run(self):
         while self.running:
             self.display()
@@ -115,10 +116,9 @@ class Game:
 
 pygame.init()
 screen = pygame.display.set_mode((1080, 720))
-x1 = aleatoire(1080,720)[0]
-y1 = aleatoire(1080,720)[1]
+x1 = 500 #aleatoire(1080,720)[0]
+y1 = 500 #aleatoire(1080,720)[1]
 game = Game(screen,x1,y1)
-game.run()  
-Player.update_health_bar(screen)
+game.run() 
 
 pygame.quit()
