@@ -3,7 +3,10 @@ from aleatoire import aleatoire
 
 
 class Player:
+    #Le joueur
+    
     def __init__(self, x, y):
+        #Initialisation du jouer : x,y : entiers (position du joueur en(x,y)
         self.image = pygame.image.load("ball.png")
         self.image
         self.rect = self.image.get_rect(x=x, y=y)
@@ -30,7 +33,7 @@ class Player:
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-                #Gestion de la barre de vie 
+        #Gestion de la barre de vie 
     def update_health_bar(surface):
         #Couleru de la barre de vie
         bar_color = (255,255,255) 
@@ -45,18 +48,33 @@ class Player:
         pygame.draw.rect(surface, bar_color, bar_position)
         
 
+class star:
+    def __init__(self,x1, y1):
+        self.image2 = pygame.image.load("star.png")
+        self.area = self.image2.get_rect(x=x1,y=y1)
 
+    def move(self):
+        ####-----------------------if self.area.colliderect(self.player.rect):
+            star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
+            ##mettre score
+            ##Changer position sprite (creer var)
+        ##else: pas besoin pour le moment
+
+    def draw(self, screen):
+        screen.blit(self.image2, self.area)
+
+            
 class Game:
-    def __init__(self, screen, x1, y1):
+
+    def __init__(self, screen):
         self.screen = screen
         self.running = True
         self.clock = pygame.time.Clock()
         self.player = Player(200, 200)
-        self.area_color = "red"
-        self.image2 = pygame.image.load("star.png")
-        self.area = self.image2.get_rect(x=x1,y=y1)
-
-
+        #
+        self.star = star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
+        #
+        
     def handling_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -75,7 +93,6 @@ class Game:
             self.player.velocity[0] = 1
         else:
             self.player.velocity[0] = 0
-
         if keys[pygame.K_UP]:
             self.player.velocity[1] = -1
         elif keys[pygame.K_DOWN]:
@@ -87,20 +104,15 @@ class Game:
             pygame.draw.line(screen, (255,255,255), (pygame.mouse.get_pos()[0],pygame.mouse.get_pos()[1]), (self.player.rect.x,self.player.rect.y))
 
     def update(self):
+        if self.star.area.colliderect(self.player.rect):
+            self.star.move()
         self.player.move()
-        if self.area.colliderect(self.player.rect):
-            ##mettre score
-            ##Changer position sprite (creer var)
-        ##else: pas besoin pour le moment
-            score = 1
-
-
         #gravité
         self.player.velocity[1] += 0.05 * 9.81
 
     def display(self):
         self.screen.fill("black")
-        screen.blit(self.image2, self.area)
+        self.star.draw(self.screen)
         self.player.draw(self.screen)
         pygame.display.flip()
 
@@ -108,6 +120,7 @@ class Game:
         while self.running:
             self.display()
             self.handling_events()
+            self.star.move()
             self.update()
             self.clock.tick(60)
 
@@ -115,10 +128,11 @@ class Game:
 
 pygame.init()
 screen = pygame.display.set_mode((1080, 720))
-x1 = aleatoire(1080,720)[0]
-y1 = aleatoire(1080,720)[1]
-game = Game(screen,x1,y1)
+##x1 = aleatoire(1080,720)[0]
+##y1 = aleatoire(1080,720)[1]
+game = Game(screen)
 game.run()  
 Player.update_health_bar(screen)
 
 pygame.quit()
+
