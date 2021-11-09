@@ -53,16 +53,17 @@ class Player:
     ##La barre de vie 
     def update_health_bar(self, screen):
         ##Couleur de la barre de vie + barre d'arrière plan
-        bar_color = (255,255,255) 
+        bar_color = (255,0,0) 
         back_bar_color = (127,127,127)
         
         ##position de la barre de vie 
-        bar_position = [100,100,50,10]
-        back_bar_position = [20,20,100,10]
+        bar_position = pygame.Rect(850,20,200,20)
+        back_bar_position = pygame.Rect(850,20,200,20)
         
         ##dessiner la barre de vie
         pygame.draw.rect(screen, back_bar_color, back_bar_position)
         pygame.draw.rect(screen, bar_color, bar_position)
+        #print(bar_color,bar_position)
         
 
 
@@ -127,8 +128,11 @@ class Game:
         self.star1.draw(self.screen)
         self.star2.draw(self.screen)
         self.player.draw(self.screen)
-        pygame.display.flip()
         self.player.update_health_bar(self.screen)
+        pygame.display.flip()
+        
+        #pygame.draw.rect(self.screen,(255,0,0),pygame.rect(100,100,100,100))
+        #pygame.display.flip()
         
     def run(self):
         while self.running:
@@ -143,7 +147,6 @@ pygame.init()
 screen = pygame.display.set_mode((1080, 720))
 game = Game(screen)
 game.run()  
-Player.update_health_bar(screen)
 
 
 pygame.quit()
