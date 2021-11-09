@@ -17,8 +17,7 @@ class Player:
         self.position = [0,0]
         self.force = [0,0]
         self.masse = 5
-        self.health = 100
-        self.max_health = 100
+
         ##########################################################################-----Ajout commentaires
 
     def move(self):
@@ -50,24 +49,31 @@ class Player:
         screen.blit(self.image, self.rect)
 
 
+class health_bar :
     ##La barre de vie 
-    def update_health_bar(self, screen):
+    def __init__(self, screen, health):
+        self.screen=screen
+        self.max_health = 200
+        
+    def draw(self, health):
         ##Couleur de la barre de vie + barre d'arrière plan
         bar_color = (255,0,0) 
         back_bar_color = (127,127,127)
         
         ##position de la barre de vie 
-        bar_position = pygame.Rect(850,20,200,20)
+        bar_position = pygame.Rect(850,20,health,20)
         back_bar_position = pygame.Rect(850,20,200,20)
         
         ##dessiner la barre de vie
-        pygame.draw.rect(screen, back_bar_color, back_bar_position)
-        pygame.draw.rect(screen, bar_color, bar_position)
+        pygame.draw.rect(self.screen, back_bar_color, back_bar_position)
+        pygame.draw.rect(self.screen, bar_color, bar_position)
         #print(bar_color,bar_position)
         
-
-
-
+        #def update(self):
+         #   if self.star.area.colliderect(self.player.rect):
+          #      self.draw.bar_position = pygame.Rect(850,20,200,20)
+        
+        
 class star:
     ##L'étoile
     def __init__(self,x1, y1):
@@ -92,7 +98,10 @@ class Game:
         ##########################################################################-----Ajout commentaires
         self.player = Player(200, 200)
         self.star = star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
+        self.health_bar = health_bar(screen, health)
         ##On definit les positions initiales du joueur et de l'étoile
+        self.health = health
+        #self.health_max = 200
         
     def handling_events(self):
         ##Effectue les actions entrées par l'utilisteur (à l'aide du clavier/souris)
@@ -113,14 +122,15 @@ class Game:
 
     def update(self):
         if self.star.area.colliderect(self.player.rect):
-            self.star = star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])  
+            self.star = star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
+            self.health = 200
         self.player.move()
 
     def display(self):
         self.screen.fill("black")
         self.star.draw(self.screen)
         self.player.draw(self.screen)
-        self.player.update_health_bar(self.screen)
+        self.health_bar.draw(self.health)
         pygame.display.flip()
         
         #pygame.draw.rect(self.screen,(255,0,0),pygame.rect(100,100,100,100))
@@ -137,6 +147,7 @@ class Game:
 
 pygame.init()
 screen = pygame.display.set_mode((1080, 720))
+health = 100
 game = Game(screen)
 game.run()  
 
