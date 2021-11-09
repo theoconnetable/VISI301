@@ -12,8 +12,11 @@ class Player:
         self.rect = self.image.get_rect(x=x, y=y)
         ##L'affichage du joueur est définie par la variable 'image'
         ##Sa position ainsi que "hitbox" sont définies par 'rect'
-        self.speed = 1
-        self.velocity = [0, 0]
+        self.acceleration = [0,0]
+        self.vitesse = [0,0]
+        self.position = [0,0]
+        self.force = [0,0]
+        self.masse = 5
         self.health = 100
         self.max_health = 100
         ##########################################################################-----Ajout commentaires
@@ -21,19 +24,26 @@ class Player:
     def move(self):
         ##Mouvement du joueur
         ##########################################################################-----Ajout commentaires
-        self.rect.move_ip(self.velocity[0] * self.speed, self.velocity[1] * self.speed)
+        dt = 0.2
+        self.force[1] = self.masse * 9.81
+
+        self.vitesse = [(dt/self.masse)*self.force[0]+self.vitesse[0],(dt/self.masse)*self.force[1]+self.vitesse[1]]
+        print ("pos : ", self.position, "vitesse : ", self.vitesse, "force : ", self.force)
+        self.rect.move_ip(dt * self.vitesse[0], dt * self.vitesse[1])
         if self.rect.left < 0:
-            self.velocity[0] = 0
+            self.vitesse[0] = 0
             self.rect.left = 0
         if  self.rect.right > screen.get_width():
-            self.velocity[0] = 0
+            self.vitesse[0] = 0
             self.rect.right = screen.get_width()
         if self.rect.top < 0:
-            self.velocity[1] = 0
+            self.vitesse[1] = 0
             self.rect.top = 0
         if  self.rect.bottom > screen.get_height():
-            self.velocity[1] = 0
+            self.vitesse[1] = 0
             self.rect.bottom = screen.get_height()
+
+
 
     def draw(self, screen):
         ##Affichage du joueur
@@ -92,22 +102,10 @@ class Game:
                 #print("appuyé")
                 pygame.draw.line(self.screen, (255, 255, 255), (0, 0), (200, 200), 4)
             if event.type == pygame.MOUSEBUTTONUP:
-                self.player.velocity[0] = - (self.player.rect.centerx - pygame.mouse.get_pos()[0])/5
-                self.player.velocity[1] = - (self.player.rect.centery - pygame.mouse.get_pos()[1])/5
+                self.player.vitesse[0] = - (self.player.rect.centerx - pygame.mouse.get_pos()[0])/3
+                self.player.vitesse[1] = - (self.player.rect.centery - pygame.mouse.get_pos()[1])/3
 
         keys = pygame.key.get_pressed()
-        '''if keys[pygame.K_LEFT]:
-            self.player.velocity[0] = -1
-        elif keys[pygame.K_RIGHT]:
-            self.player.velocity[0] = 1
-        else:
-            self.player.velocity[0] = 0
-        if keys[pygame.K_UP]:
-            self.player.velocity[1] = -1
-        elif keys[pygame.K_DOWN]:
-            self.player.velocity[1] = 1
-        else:
-            self.player.velocity[1] = 0'''
 
         if pygame.mouse.get_pressed()[0]:
             pygame.draw.line(screen, (255,255,255), (pygame.mouse.get_pos()[0],pygame.mouse.get_pos()[1]), (self.player.rect.x,self.player.rect.y))
@@ -116,8 +114,6 @@ class Game:
         if self.star.area.colliderect(self.player.rect):
             self.star = star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])  
         self.player.move()
-        #gravité
-        self.player.velocity[1] += 0.05 * 9.81
 
     def display(self):
         self.screen.fill("black")
