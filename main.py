@@ -89,6 +89,19 @@ class Star:
     def draw(self, screen):
         screen.blit(self.image2, self.area) 
 
+class score:
+    ##Le score
+    def __init__(self, valscore, screen):
+        self.font = pygame.font.Font('freesansbold.ttf', 32)
+        self.valscore = valscore
+
+    def augmente (self):
+        self.valscore = self.valscore + 1
+        
+    def draw(self, screen):
+        self.scorerendered = self.font.render('score: ' + str(self.valscore), True, (255,255,255))
+        screen.blit(self.scorerendered, (250, 10))
+
 
 class Background:
     def __init__(self):
@@ -126,6 +139,8 @@ class Game:
         ##On definit les positions initiales du joueur et de l'étoile
         self.health = health
         #self.health_max = 200
+        self.valscore = 0
+        self.score = score(self.valscore, screen)
         
     def handling_events(self):
         ##Effectue les actions entrées par l'utilisteur (à l'aide du clavier/souris)
@@ -148,9 +163,11 @@ class Game:
         if (self.star1.area.colliderect(self.player.rect) or (self.star1.area.bottom > self.screen.get_height())):
             self.star1 = Star(aleatoire(screen.get_width(),screen.get_height())[0],aleatoire(screen.get_width(),screen.get_height())[1])
             self.health = self.health +10
+            self.score.augmente()
         if (self.star2.area.colliderect(self.player.rect) or (self.star2.area.bottom > self.screen.get_height())):
             self.star2 = Star(aleatoire(screen.get_width(),screen.get_height())[0],aleatoire(screen.get_width(),screen.get_height())[1])
             self.health = self.health + 10
+            self.score.augmente()
         else :
             self.health = self.health - 0.5
             if self.health == 0 :
@@ -172,6 +189,7 @@ class Game:
         self.star2.draw(self.screen)
         self.player.draw(self.screen)
         self.health_bar.draw(self.health)
+        self.score.draw(self.screen)
         pygame.display.flip()
         
         #pygame.draw.rect(self.screen,(255,0,0),pygame.rect(100,100,100,100))
