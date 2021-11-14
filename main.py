@@ -163,7 +163,7 @@ class Game:
         else:
             self.star1.move(1)
             self.star2.move(1)
-            self.background.move(2)
+            self.background.move(1)
 
 
     def display(self):
