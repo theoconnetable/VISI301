@@ -172,7 +172,6 @@ screen = pygame.display.set_mode((400, 720))
 health = 200
 game = Game(screen)
 game.run()
-#test commit
 
 
 pygame.quit()
