@@ -127,10 +127,10 @@ class Game:
 
     def update(self):
         if (self.star1.area.colliderect(self.player.rect) or (self.star1.area.bottom > self.screen.get_height())):
-            self.star1 = Star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
+            self.star1 = Star(aleatoire(screen.get_width(),screen.get_height())[0],aleatoire(screen.get_width(),screen.get_height())[1])
             self.health = self.health +10
         if (self.star2.area.colliderect(self.player.rect) or (self.star2.area.bottom > self.screen.get_height())):
-            self.star2 = Star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
+            self.star2 = Star(aleatoire(screen.get_width(),screen.get_height())[0],aleatoire(screen.get_width(),screen.get_height())[1])
             self.health = self.health + 10
         else :
             self.health = self.health - 0.5
@@ -168,7 +168,7 @@ class Game:
 
 
 pygame.init()
-screen = pygame.display.set_mode((1080, 720))
+screen = pygame.display.set_mode((400, 720))
 health = 200
 game = Game(screen)
 game.run()  
