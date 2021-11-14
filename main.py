@@ -104,11 +104,10 @@ class Background:
     def move (self, x):
         self.rect1.move_ip(0, x)
         self.rect2.move_ip(0, x)
-        print (self.rect1.top, self.rect1.bottom)
+        #print (self.rect1.top, self.rect1.bottom)
         if (self.rect1.top >= screen.get_height()):
-            self.rect1.top = -self.rect1.height
-        if (self.rect2.top >= screen.get_height()):
-            self.rect2.top = -self.rect1.height
+            self.rect1.top = 0
+            self.rect2.bottom = 0
     
 class Game:
     ##Le jeu
@@ -133,12 +132,15 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-            if pygame.mouse.get_pressed()[0]:
-                #print("appuyé")
-                pygame.draw.line(screen, (255,255,255), (pygame.mouse.get_pos()[0],pygame.mouse.get_pos()[1]), (self.player.rect.x,self.player.rect.y))
             if event.type == pygame.MOUSEBUTTONUP:
-                self.player.vitesse[0] = - (self.player.rect.centerx - pygame.mouse.get_pos()[0])/3
-                self.player.vitesse[1] = - (self.player.rect.centery - pygame.mouse.get_pos()[1])/3
+                vitesseX = - (self.player.rect.centerx - pygame.mouse.get_pos()[0])/3
+                vitesseY = - (self.player.rect.centery - pygame.mouse.get_pos()[1])/3
+                if (vitesseX < -100):
+                    vitesseX = -100
+                if (vitesseY < -100):
+                    vitesseY = -100
+                self.player.vitesse[0] = vitesseX
+                self.player.vitesse[1] = vitesseY
 
         keys = pygame.key.get_pressed()
 
@@ -156,14 +158,11 @@ class Game:
         #print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
         self.player.move()
         #print (self.player.plafond())
+        #print (self.player.vitesse[1])
         if (self.player.plafond()):
-            self.star1.move(2)
-            self.star2.move(2)
-            self.background.move(2)
-        else:
-            self.star1.move(1)
-            self.star2.move(1)
-            self.background.move(1)
+            self.star1.move(-self.player.vitesse[1])
+            self.star2.move(-self.player.vitesse[1])
+            self.background.move(-self.player.vitesse[1])
 
 
     def display(self):
