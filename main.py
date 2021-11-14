@@ -13,7 +13,7 @@ class Player:
         ##L'affichage du joueur est définie par la variable 'image'
         ##Sa position ainsi que "hitbox" sont définies par 'rect'
         self.acceleration = [0,0]
-        self.vitesse = [0,-150]
+        self.vitesse = [0,-100]
         self.position = [x,y]
         self.force = [0,0]
         self.masse = 5
@@ -64,8 +64,8 @@ class health_bar :
         back_bar_color = (127,127,127)
         
         ##position de la barre de vie 
-        bar_position = pygame.Rect(850,20,health,20)
-        back_bar_position = pygame.Rect(850,20,200,20)
+        bar_position = pygame.Rect(20,20,health,20)
+        back_bar_position = pygame.Rect(20,20,200,20)
         
         ##dessiner la barre de vie
         pygame.draw.rect(self.screen, back_bar_color, back_bar_position)
@@ -92,7 +92,23 @@ class Star:
 
 class Background:
     def __init__(self):
-        pass
+        self.image1 = pygame.image.load("fond-nuage.png")
+        self.image2 = pygame.image.load("fond-nuage.png")
+        self.rect1 = self.image1.get_rect(x=0,y=0)
+        self.rect2 = self.image2.get_rect(x=0, y=-self.rect1.height)
+
+    def draw(self, screen):
+        screen.blit (self.image1, self.rect1)
+        screen.blit (self.image2, self.rect2)
+
+    def move (self, x):
+        self.rect1.move_ip(0, x)
+        self.rect2.move_ip(0, x)
+        print (self.rect1.top, self.rect1.bottom)
+        if (self.rect1.top >= screen.get_height()):
+            self.rect1.top = -self.rect1.height
+        if (self.rect2.top >= screen.get_height()):
+            self.rect2.top = -self.rect1.height
     
 class Game:
     ##Le jeu
@@ -103,6 +119,7 @@ class Game:
         self.running = True
         self.clock = pygame.time.Clock()
         ##########################################################################-----Ajout commentaires
+        self.background = Background()
         self.health_bar = health_bar(screen, health)
         self.player = Player(200, 700)
         self.star1 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
@@ -136,19 +153,22 @@ class Game:
             self.health = self.health - 0.5
             if self.health == 0 :
                 pygame.quit()
-        print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
+        #print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
         self.player.move()
-        print (self.player.plafond())
+        #print (self.player.plafond())
         if (self.player.plafond()):
             self.star1.move(2)
             self.star2.move(2)
+            self.background.move(2)
         else:
             self.star1.move(1)
             self.star2.move(1)
+            self.background.move(2)
 
 
     def display(self):
-        self.screen.fill("black")
+        #self.screen.fill("black")
+        self.background.draw (self.screen)
         self.star1.draw(self.screen)
         self.star2.draw(self.screen)
         self.player.draw(self.screen)
