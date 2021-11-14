@@ -161,11 +161,11 @@ class Game:
 
     def update(self):
         if (self.star1.area.colliderect(self.player.rect) or (self.star1.area.bottom > self.screen.get_height())):
-            self.star1 = Star(aleatoire(screen.get_width(),screen.get_height())[0],aleatoire(screen.get_width(),screen.get_height())[1])
+            self.star1 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[0],aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[1])
             self.health = self.health +10
             self.score.augmente()
         if (self.star2.area.colliderect(self.player.rect) or (self.star2.area.bottom > self.screen.get_height())):
-            self.star2 = Star(aleatoire(screen.get_width(),screen.get_height())[0],aleatoire(screen.get_width(),screen.get_height())[1])
+            self.star2 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[0],aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[1])
             self.health = self.health + 10
             self.score.augmente()
         else :
