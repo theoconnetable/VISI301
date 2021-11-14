@@ -30,20 +30,23 @@ class Player:
         self.vitesse = [(dt/self.masse)*self.force[0]+self.vitesse[0], (dt/self.masse)*self.force[1]+self.vitesse[1]]
         #print ("pos : ", self.position, "vitesse : ", self.vitesse, "force : ", self.force)
         self.rect.move_ip(dt * self.vitesse[0], dt * self.vitesse[1])
-        if self.rect.left < 0:
+        if self.rect.left < 0:  #bord gauche
             self.vitesse[0] = - 0.5 * self.vitesse[0]
             self.rect.left = 0
-        if  self.rect.right > screen.get_width():
+        if  self.rect.right > screen.get_width():   #bord droit
             self.vitesse[0] = - 0.5 * self.vitesse[0]
             self.rect.right = screen.get_width()
-        if self.rect.top < 0:
-            self.vitesse[1] = 0
-            self.rect.top = 0
-        if  self.rect.bottom > screen.get_height():
+        if self.rect.top < 100:   #bord haut
+            self.rect.top = 100
+        if  self.rect.bottom > screen.get_height(): #bord bas
             self.vitesse[1] = 0
             self.rect.bottom = screen.get_height()
 
-
+    def plafond (self) :
+        res = False
+        if self.rect.top <= 100:
+            res = True
+        return res
 
     def draw(self, screen):
         ##Affichage du joueur
@@ -78,13 +81,17 @@ class Star:
         ##L'affichage de l'étoile est définit par la variable 'image2'
         ##Sa position ainsi que "hitbox" sont définies par 'area'
 
-    def move (self):
-        self.area.move_ip(0,1)
+    def move (self, x):
+        self.area.move_ip(0,x)
 
     def draw(self, screen):
         screen.blit(self.image2, self.area)
 
-            
+
+class Background:
+    def __init__(self):
+        pass
+    
 class Game:
     ##Le jeu
 
@@ -95,8 +102,8 @@ class Game:
         self.clock = pygame.time.Clock()
         ##########################################################################-----Ajout commentaires
         self.player = Player(200, 700)
-        self.star1 = Star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
-        self.star2 = Star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
+        self.star1 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
+        self.star2 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
         ##On definit les positions initiales du joueur et de l'étoile
         
     def handling_events(self):
@@ -115,13 +122,19 @@ class Game:
 
     def update(self):
         if (self.star1.area.colliderect(self.player.rect) or (self.star1.area.bottom > self.screen.get_height())):
-            self.star1 = Star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
+            self.star1 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
         if (self.star2.area.colliderect(self.player.rect) or (self.star2.area.bottom > self.screen.get_height())):
-            self.star2 = Star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
-        print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
+            self.star2 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
+        #print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
         self.player.move()
-        self.star1.move()
-        self.star2.move()
+        print (self.player.plafond())
+        if (self.player.plafond()):
+            self.star1.move(2)
+            self.star2.move(2)
+        else:
+            self.star1.move(1)
+            self.star2.move(1)
+
 
     def display(self):
         self.screen.fill("black")
