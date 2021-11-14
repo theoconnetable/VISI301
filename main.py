@@ -85,7 +85,7 @@ class Star:
         self.area.move_ip(0,x)
 
     def draw(self, screen):
-        screen.blit(self.image2, self.area)
+        screen.blit(self.image2, self.area) 
 
 
 class Background:
