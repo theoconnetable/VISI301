@@ -89,7 +89,7 @@ class Star:
     def draw(self, screen):
         screen.blit(self.image2, self.area) 
 
-class score:
+class Score:
     ##Le score
     def __init__(self, valscore, screen):
         self.font = pygame.font.Font('freesansbold.ttf', 32)
@@ -140,7 +140,7 @@ class Game:
         self.health = health
         #self.health_max = 200
         self.valscore = 0
-        self.score = score(self.valscore, screen)
+        self.score = Score(self.valscore, screen)
         
     def handling_events(self):
         ##Effectue les actions entrées par l'utilisteur (à l'aide du clavier/souris)
