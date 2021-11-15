@@ -160,11 +160,15 @@ class Game:
         keys = pygame.key.get_pressed()
 
     def update(self):
-        if (self.star1.area.colliderect(self.player.rect) or (self.star1.area.bottom > self.screen.get_height())):
+        if (self.star1.area.bottom > self.screen.get_height()):
+            self.star1 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height() // 2)[0], aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height() // 2)[1])
+        if (self.star2.area.bottom > self.screen.get_height()):
+            self.star2 = Star(aleatoire(screen.get_width() - self.star2.image2.get_width(), screen.get_height() // 2)[0], aleatoire(screen.get_width() - self.star2.image2.get_width(), screen.get_height() // 2)[1])
+        if (self.star1.area.colliderect(self.player.rect)):
             self.star1 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[0],aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[1])
             self.health = self.health +10
             self.score.augmente()
-        if (self.star2.area.colliderect(self.player.rect) or (self.star2.area.bottom > self.screen.get_height())):
+        if (self.star2.area.colliderect(self.player.rect)):
             if self.health < 190 :
                 self.health = self.health + 10
             else :
