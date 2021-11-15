@@ -124,9 +124,12 @@ class Game:
             self.health = self.health +10
         if (self.star2.area.colliderect(self.player.rect) or (self.star2.area.bottom > self.screen.get_height())):
             self.star2 = Star(aleatoire(1080,720)[0],aleatoire(1080,720)[1])
-            self.health = self.health + 10
+            if self.health < 190 :
+                self.health = self.health + 10
+            else :
+                self.health = 200
         else :
-            self.health = self.health - 0.5
+            self.health = self.health - 0.1
             if self.health == 0 :
                 pygame.quit()
         print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
