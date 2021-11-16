@@ -4,7 +4,7 @@ from aleatoire import aleatoire
 
 class Player:
     #Le joueur
-    
+
     def __init__(self, x, y):
          ##Initialisation du jouer : x,y : entiers (position du joueur en(x,y))
         self.image = pygame.image.load("ball.png")
@@ -16,6 +16,7 @@ class Player:
         self.vitesse = [0,-100]
         self.position = [x,y]
         self.force = [0,0]
+        self.dt = 0.2
         self.masse = 5
 
         ##########################################################################-----Ajout commentaires
@@ -23,12 +24,11 @@ class Player:
     def move(self):
         ##Mouvement du joueur
         ##########################################################################-----Ajout commentaires
-        dt = 0.2
         self.force[1] = self.masse * 9.81
 
-        self.vitesse = [(dt/self.masse)*self.force[0]+self.vitesse[0], (dt/self.masse)*self.force[1]+self.vitesse[1]]
+        self.vitesse = [(self.dt/self.masse)*self.force[0]+self.vitesse[0], (self.dt/self.masse)*self.force[1]+self.vitesse[1]]
         #print ("pos : ", self.position, "vitesse : ", self.vitesse, "force : ", self.force)
-        self.rect.move_ip(dt * self.vitesse[0], dt * self.vitesse[1])
+        self.rect.move_ip(self.dt * self.vitesse[0], self.dt * self.vitesse[1])
         if self.rect.left < 0:  #bord gauche
             self.vitesse[0] = - 0.5 * self.vitesse[0]
             self.rect.left = 0
@@ -40,6 +40,9 @@ class Player:
         if  self.rect.bottom > screen.get_height(): #bord bas
             self.vitesse[1] = 0
             self.rect.bottom = screen.get_height()
+
+    def set_time (self, time):
+        self.dt = time
 
     def plafond (self) :
         res = False
@@ -53,20 +56,20 @@ class Player:
 
 
 class health_bar :
-    ##La barre de vie 
+    ##La barre de vie
     def __init__(self, screen, health):
         self.screen=screen
         self.max_health = 200
-        
+
     def draw(self, health):
         ##Couleur de la barre de vie + barre d'arrière plan
-        bar_color = (255,0,0) 
+        bar_color = (255,0,0)
         back_bar_color = (127,127,127)
-        
-        ##position de la barre de vie 
+
+        ##position de la barre de vie
         bar_position = pygame.Rect(20,20,health,20)
         back_bar_position = pygame.Rect(20,20,200,20)
-        
+
         ##dessiner la barre de vie
         pygame.draw.rect(self.screen, back_bar_color, back_bar_position)
         pygame.draw.rect(self.screen, bar_color, bar_position)
@@ -87,7 +90,7 @@ class Star:
         self.area.move_ip(0,x)
 
     def draw(self, screen):
-        screen.blit(self.image2, self.area) 
+        screen.blit(self.image2, self.area)
 
 class Score:
     ##Le score
@@ -97,7 +100,7 @@ class Score:
 
     def augmente (self):
         self.valscore = self.valscore + 1
-        
+
     def draw(self, screen):
         self.scorerendered = self.font.render('score: ' + str(self.valscore), True, (255,255,255))
         screen.blit(self.scorerendered, (250, 10))
@@ -121,7 +124,7 @@ class Background:
         if (self.rect1.top >= screen.get_height()):
             self.rect1.top = 0
             self.rect2.bottom = 0
-    
+
 class Game:
     ##Le jeu
 
@@ -141,12 +144,15 @@ class Game:
         #self.health_max = 200
         self.valscore = 0
         self.score = Score(self.valscore, screen)
-        
+
     def handling_events(self):
         ##Effectue les actions entrées par l'utilisteur (à l'aide du clavier/souris)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.player.set_time(0.1)
+                print ("coucou")
             if event.type == pygame.MOUSEBUTTONUP:
                 vitesseX = - (self.player.rect.centerx - pygame.mouse.get_pos()[0])/3
                 vitesseY = - (self.player.rect.centery - pygame.mouse.get_pos()[1])/3
@@ -156,6 +162,7 @@ class Game:
                     vitesseY = -100
                 self.player.vitesse[0] = vitesseX
                 self.player.vitesse[1] = vitesseY
+                self.player.set_time(0.2)
 
         keys = pygame.key.get_pressed()
 
@@ -199,10 +206,10 @@ class Game:
         self.health_bar.draw(self.health)
         self.score.draw(self.screen)
         pygame.display.flip()
-        
+
         #pygame.draw.rect(self.screen,(255,0,0),pygame.rect(100,100,100,100))
         #pygame.display.flip()
-        
+
     def run(self):
         while self.running:
             self.display()
