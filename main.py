@@ -121,7 +121,7 @@ class Background:
         if (self.rect1.top >= screen.get_height()):
             self.rect1.top = 0
             self.rect2.bottom = 0
-    
+
 class Game:
     ##Le jeu
 
@@ -129,6 +129,8 @@ class Game:
         ##Initialisation du jouer : x,y : entiers (position du joueur en(x,y))
         self.screen = screen
         self.running = True
+        self.play_button = play_button
+        self.is_playing = False
         self.clock = pygame.time.Clock()
         ##########################################################################-----Ajout commentaires
         self.background = Background()
@@ -201,17 +203,22 @@ class Game:
         
     def run(self):
         while self.running:
-            self.display()
-            self.handling_events()
-            self.update()
-            self.clock.tick(60)
+            if self.is_playing :
+                self.display()
+                self.handling_events()
+                self.update()
+                self.clock.tick(60)
+            else :
+                screen.blit(self.play_button, (0,0))            
 
 
 
 pygame.init()
 screen = pygame.display.set_mode((400, 720))
 health = 200
+play_button = pygame.image.load("Jouer.png")   
 game = Game(screen)
+
 game.run()
 
 
