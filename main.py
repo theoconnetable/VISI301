@@ -82,9 +82,9 @@ class health_bar :
             self.health = 200
             
     def decrease(self):
-        self.health = self.health - 0.1
-        if self.health == 0 :
-            pygame.quit()
+        self.health = self.health - 0.5
+        if self.health < 0 :
+            pygame.QUIT()
 
 
 class Star:
@@ -136,6 +136,15 @@ class Background:
             self.rect1.top = 0
             self.rect2.bottom = 0
 
+class Home :
+    # Ecran d'acceuil
+        
+    def display(self):
+        self.background.draw (self.screen)
+        screen.blit(self.play_button, self.play_button_rect) 
+        pygame.display.flip()
+        self.handling_events()
+
 class Game:
     ##Le jeu
 
@@ -143,8 +152,13 @@ class Game:
         ##Initialisation du jouer : x,y : entiers (position du joueur en(x,y))
         self.screen = screen
         self.running = True
-        #self.play_button = play_button
-        self.is_playing = True
+        # Définir si le jeu à commencé
+        self.is_playing = False
+        self.play_button = pygame.image.load("Jouer.png")
+        self.play_button = pygame.transform.scale(self.play_button,(350,150))
+        self.play_button_rect = self.play_button.get_rect()
+        self.play_button_rect.x = 25
+        self.play_button_rect.y = 400 
         self.clock = pygame.time.Clock()
         ##########################################################################-----Ajout commentaires
         self.background = Background()
@@ -166,6 +180,10 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.player.set_time(0.1)
                 #print ("coucou")
+                #Souris en collision avec le bouton
+                if self.play_button_rect.collidepoint(event.pos):
+                    self.is_playing = True
+                
             if event.type == pygame.MOUSEBUTTONUP:
                 vitesseX = - (self.player.rect.centerx - pygame.mouse.get_pos()[0])/3
                 vitesseY = - (self.player.rect.centery - pygame.mouse.get_pos()[1])/3
@@ -227,14 +245,14 @@ class Game:
                 self.handling_events()
                 self.update()
                 self.clock.tick(60)
-            #else :
-             #   screen.blit(self.play_button, (0,0))            
+            else :
+                Home.display(self)
+                
 
 
 
 pygame.init()
 screen = pygame.display.set_mode((400, 720))
-#play_button = pygame.image.load("Jouer.png")   
 game = Game(screen)
 
 game.run()
