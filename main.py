@@ -77,7 +77,7 @@ class health_bar :
         #print(bar_color,bar_position)
     def augmente (self):
         if self.health < 190 :
-            self.health = self.health + 10
+            self.health = self.health + 30
         else :
             self.health = 200
             
