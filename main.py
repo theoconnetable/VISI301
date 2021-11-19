@@ -82,9 +82,9 @@ class health_bar :
             self.health = 200
             
     def decrease(self):
-        self.health = self.health - 0.5
+        self.health = self.health - 0.1
         if self.health < 0 :
-            pygame.QUIT()
+            pygame.quit()
 
 
 class Star:
