@@ -17,7 +17,7 @@ class Player:
         self.position = [x,y]
         self.force = [0,0]
         self.dt = 0.2
-        self.masse = 5
+        self.masse = 1
 
         ##########################################################################-----Ajout commentaires
 
@@ -60,32 +60,44 @@ class health_bar :
     def __init__(self, screen, health):
         self.screen = screen
         self.health = health
-        self.max_health = 200
+        self.max_health = health
+        self.background = Background()
+        self.end_play = pygame.image.load("Image1.png")
+        self.end_play_rect = self.end_play.get_rect()
+        self.end_play_rect.x = 25
+        self.end_play_rect.y = 400 
+        self.play_button = pygame.image.load("Jouer.png")
+        self.play_button = pygame.transform.scale(self.play_button,(350,150))
+        self.play_button_rect = self.play_button.get_rect()
+        self.play_button_rect.x = 25
+        self.play_button_rect.y = 400
 
     def draw(self, health):
         ##Couleur de la barre de vie + barre d'arrière plan
+        #self.screen = screen 
         bar_color = (255,0,0)
         back_bar_color = (127,127,127)
 
         ##position de la barre de vie
         bar_position = pygame.Rect(20,20,self.health,20)
-        back_bar_position = pygame.Rect(20,20,200,20)
+        back_bar_position = pygame.Rect(20,20,self.max_health,20)
 
         ##dessiner la barre de vie
         pygame.draw.rect(self.screen, back_bar_color, back_bar_position)
         pygame.draw.rect(self.screen, bar_color, bar_position)
         #print(bar_color,bar_position)
     def augmente (self):
-        if self.health < 190 :
-            self.health = self.health + 30
+        if self.health < 170 :
+            self.health = self.health + 15
         else :
             self.health = 200
             
-    def decrease(self):
-        self.health = self.health - 0.1
+    def decrease(self, is_playing):
+        self.health = self.health - 1
         if self.health < 0 :
-            pygame.quit()
-
+            self.font = pygame.font.Font('freesansbold.ttf', 60)
+            self.end = self.font.render('GAME OVER', True, (0,0,0))
+            screen.blit(self.end, (15, 300))            
 
 class Star:
     ##L'étoile
@@ -137,11 +149,10 @@ class Background:
             self.rect2.bottom = 0
 
 class Home :
-    # Ecran d'acceuil
-        
+    # Ecran d'acceuil 
     def display(self):
         self.background.draw (self.screen)
-        screen.blit(self.play_button, self.play_button_rect) 
+        screen.blit(self.play_button,self.play_button_rect) 
         pygame.display.flip()
         self.handling_events()
 
@@ -213,7 +224,7 @@ class Game:
             self.score.augmente()
             
         else :
-            self.health_bar.decrease()
+            self.health_bar.decrease(self.is_playing)
 
         #print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
         self.player.move()
@@ -233,10 +244,12 @@ class Game:
         self.player.draw(self.screen)
         self.health_bar.draw(self.health)
         self.score.draw(self.screen)
+        self.health_bar.decrease(self.is_playing)
         pygame.display.flip()
 
         #pygame.draw.rect(self.screen,(255,0,0),pygame.rect(100,100,100,100))
         #pygame.display.flip()
+        
 
     def run(self):
         while self.running:
