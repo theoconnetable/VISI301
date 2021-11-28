@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 from aleatoire import aleatoire
 
 
@@ -54,7 +54,35 @@ class Player:
         ##Affichage du joueur
         screen.blit(self.image, self.rect)
 
+class Particle:
+    ###############################
+    def __init__(self):
+        self.particles = []
+    def emit(self):
+        if self.particles:
+            self.delete_particles()
+            for particle in self.particles:
+                particle[0][1] += particle[2][0]
+                particle[0][0] += particle[2][1]
+                particle[1] -= 0.2
+                pygame.draw.circle(screen,pygame.Color((255,0,0)),particle[0], int(particle[1]))
 
+    def add_particles(self,x,y):
+        pos_x = x
+        pos_y = y
+        radius = 10
+        direction_x = random.randint(0,2)
+        direction_y = random.randint(0,2)
+        particle_circle = [[pos_x,pos_y],radius,[direction_x,direction_y]]
+        self.particles.append(particle_circle)
+
+    def delete_particles(self):
+        particle_copy = [particle for particle in self.particles if particle[1] > 0]
+        self.particles = particle_copy
+
+
+
+    
 class health_bar :
     ##La barre de vie
     def __init__(self, screen, health):
@@ -182,6 +210,8 @@ class Game:
         #self.health_max = 200
         self.valscore = 0
         self.score = Score(self.valscore, screen)
+        ###############################################################
+        self.particleball = Particle()
 
     def handling_events(self):
         ##Effectue les actions entrées par l'utilisteur (à l'aide du clavier/souris)
@@ -225,6 +255,7 @@ class Game:
             
         else :
             self.health_bar.decrease(self.is_playing)
+            self.particleball.add_particles(self.player.rect.centerx,self.player.rect.centery) ###########################################AAAAAAAAAAAAAAAAAAAAAAA--------------------------------------------
 
         #print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
         self.player.move()
@@ -245,6 +276,7 @@ class Game:
         self.health_bar.draw(self.health)
         self.score.draw(self.screen)
         self.health_bar.decrease(self.is_playing)
+        self.particleball.emit()
         pygame.display.flip()
 
         #pygame.draw.rect(self.screen,(255,0,0),pygame.rect(100,100,100,100))
