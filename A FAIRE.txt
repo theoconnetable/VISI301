@@ -3,7 +3,7 @@ AJOUTS A FAIRE :
 Game Over --EMILIEN
 	BONUS
 Vie qui descend de plus en plus vite --LUCA
-Highscore --MOI
+Highscore --THEO
 	COMMENTAIRES -----------------------------
 	-Struture a reorganiser
 	-Ralentissements
