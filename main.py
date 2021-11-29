@@ -1,4 +1,4 @@
-import pygame, random
+import pygame, randoms
 from aleatoire import aleatoire
 
 
@@ -121,7 +121,7 @@ class health_bar :
             self.health = 200
             
     def decrease(self, is_playing):
-        self.health = self.health - 1
+        self.health = self.health - 0.1
         if self.health < 0 :
             self.font = pygame.font.Font('freesansbold.ttf', 60)
             self.end = self.font.render('GAME OVER', True, (0,0,0))
@@ -255,7 +255,7 @@ class Game:
             
         else :
             self.health_bar.decrease(self.is_playing)
-            self.particleball.add_particles(self.player.rect.centerx,self.player.rect.centery) ###########################################AAAAAAAAAAAAAAAAAAAAAAA--------------------------------------------
+            self.particleball.add_particles(self.player.rect.centerx,self.player.rect.centery) #---------------------------------
 
         #print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
         self.player.move()

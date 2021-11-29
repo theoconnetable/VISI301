@@ -1,0 +1,13 @@
+AJOUTS A FAIRE :
+	Score (contours)
+Game Over --EMILIEN
+	BONUS
+Vie qui descend de plus en plus vite --LUCA
+Highscore --MOI
+	COMMENTAIRES -----------------------------
+	-Struture a reorganiser
+	-Ralentissements
+	-Plateformes
+	-Trous noir brouillard vents
+	//SOND Desing
+	//Skins (couleurs)
