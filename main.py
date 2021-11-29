@@ -261,7 +261,7 @@ class Game:
             
         else :
             self.health_bar.decrease(self.is_playing)
-            self.particleball.add_particles(self.player.rect.centerx,self.player.rect.centery) ###########################################AAAAAAAAAAAAAAAAAAAAAAA--------------------------------------------
+            self.particleball.add_particles(self.player.rect.centerx,self.player.rect.centery) #---------------------------------
 
         # Augmentation du score en fonction du score
         if (self.score.valscore % 20 == 0 and self.health_bar.baisseOk):
