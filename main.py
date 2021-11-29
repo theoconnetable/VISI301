@@ -1,4 +1,4 @@
-import pygame, randoms
+import pygame, random
 from aleatoire import aleatoire
 
 
