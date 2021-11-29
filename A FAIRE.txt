@@ -9,5 +9,5 @@ Highscore --THEO
 	-Ralentissements
 	-Plateformes
 	-Trous noir brouillard vents
-	//SOND Desing
+	//SOuND Desing (doublé à la bouche + boutton activer/desactiver son) 
 	//Skins (couleurs)
