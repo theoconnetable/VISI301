@@ -99,6 +99,8 @@ class health_bar :
         self.play_button_rect = self.play_button.get_rect()
         self.play_button_rect.x = 25
         self.play_button_rect.y = 400
+        self.baisse = 0.1
+        self.baisseOk = False
 
     def draw(self, health):
         ##Couleur de la barre de vie + barre d'arrière plan
@@ -121,11 +123,15 @@ class health_bar :
             self.health = 200
             
     def decrease(self, is_playing):
-        self.health = self.health - 0.1
+        self.health = self.health - self.baisse
         if self.health < 0 :
             self.font = pygame.font.Font('freesansbold.ttf', 60)
             self.end = self.font.render('GAME OVER', True, (0,0,0))
-            screen.blit(self.end, (15, 300))            
+            screen.blit(self.end, (15, 300))
+
+    def augment_baisse(self):
+        self.baisse += 0.1
+        self.baisseOk = False
 
 class Star:
     ##L'étoile
@@ -250,7 +256,7 @@ class Game:
             self.star1 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[0],aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[1])
             self.health_bar.augmente()
             self.score.augmente()
-            
+
         if (self.star2.area.colliderect(self.player.rect)):
             self.star2 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[0],aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[1])
             self.health_bar.augmente()
@@ -258,7 +264,13 @@ class Game:
             
         else :
             self.health_bar.decrease(self.is_playing)
-            self.particleball.add_particles(self.player.rect.centerx,self.player.rect.centery) ###########################################AAAAAAAAAAAAAAAAAAAAAAA--------------------------------------------
+            self.particleball.add_particles(self.player.rect.centerx,self.player.rect.centery) #---------------------------------
+
+        # Augmentation du score en fonction du score
+        if (self.score.valscore % 20 == 0 and self.health_bar.baisseOk):
+            self.health_bar.augment_baisse()
+        if (self.score.valscore % 20 == 1):
+            self.health_bar.baisseOk = True
 
         #print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
         self.player.move()
