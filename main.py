@@ -151,14 +151,14 @@ class Star:
 
     def draw(self, screen):
         screen.blit(self.image2, self.area)
-class Bonus :
-    def __init__(self,x2,y2):
-        self.image_sablier = pygame.image.load("sablier.png")
-        self.sablier_rect = self.image_sablier.get_rect(x=x2,y=y2)
-        self.pos =[x2, y2]
+#class Bonus :
+ #   def __init__(self,x2,y2):
+  #      self.image_sablier = pygame.image.load("sablier.png")
+   #     self.sablier_rect = self.image_sablier.get_rect(x=x2,y=y2)
+    #    self.pos =[x2, y2]
     
-    def draw(self,screen):
-        screen.blit(self.image_sablier, self.sablier_rect)
+    #def draw(self,screen):
+     #   screen.blit(self.image_sablier, self.sablier_rect)
         
 class Score:
     ##Le score
@@ -256,7 +256,7 @@ class Game:
         self.player = Player(200, 650)
         self.star1 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
         self.star2 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
-        self.sablier = Bonus(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
+        #self.sablier = Bonus(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
         ##On definit les positions initiales du joueur et de l'étoile
         #self.health_max = 200
         self.valscore = 0
@@ -350,7 +350,7 @@ class Game:
         # Augmentation du score en fonction du score
         if (self.score.valscore % 5 == 0 and self.health_bar.baisseOk):
             self.health_bar.augment_baisse()
-            Bonus.draw(self, self.screen)
+            #Bonus.draw(self, self.screen)
         if (self.score.valscore % 20 == 1):
             self.health_bar.baisseOk = True
 
