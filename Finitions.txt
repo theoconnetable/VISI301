@@ -1,0 +1,6 @@
+score utilise la variable valscore au lieu du augmente ou autonomie pour highscore
+
+
+
+Tri clarté
+commentaire
