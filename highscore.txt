@@ -1,1 +1,1 @@
-joueur1 :27
+joueur1 :2
