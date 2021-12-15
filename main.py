@@ -190,6 +190,7 @@ class Home :
     def display(self):
         self.background.draw (self.screen)
         screen.blit(self.play_button,self.play_button_rect) 
+        screen.blit(self.banner,(0,200)) 
         pygame.display.flip()
         self.handling_events()
 
@@ -206,7 +207,9 @@ class Game:
         self.play_button = pygame.transform.scale(self.play_button,(350,150))
         self.play_button_rect = self.play_button.get_rect()
         self.play_button_rect.x = 25
-        self.play_button_rect.y = 400 
+        self.play_button_rect.y = 300
+        self.banner = pygame.image.load("banner.png")
+        self.banner = pygame.transform.scale(self.banner,(400,100))
         self.clock = pygame.time.Clock()
         ##########################################################################-----Ajout commentaires
         self.background = Background()

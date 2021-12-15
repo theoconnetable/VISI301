@@ -3,11 +3,11 @@ AJOUTS A FAIRE :
 Game Over --EMILIEN
 	BONUS
 Vie qui descend de plus en plus vite --LUCA
-Highscore --MOI
+Highscore --THEO
 	COMMENTAIRES -----------------------------
 	-Struture a reorganiser
 	-Ralentissements
 	-Plateformes
 	-Trous noir brouillard vents
-	//SOND Desing
+	//SOuND Desing (doublé à la bouche + boutton activer/desactiver son) 
 	//Skins (couleurs)
