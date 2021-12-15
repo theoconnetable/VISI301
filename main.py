@@ -16,6 +16,8 @@ class Player:
         self.vitesse = [0,-100]
         self.position = [x,y]
         self.force = [0,0]
+        self.ralenti = False
+        self.timer_ral = 0
         self.dt = 0.2
         self.masse = 1
 
@@ -41,6 +43,12 @@ class Player:
     def set_time (self, time):
         self.dt = time
 
+    def set_ralenti (self):
+        if self.timer_ral > 0:
+            self.timer_ral -= 1
+        else :
+            self.ralenti = False
+
     def plafond (self) :
         res = False
         if self.rect.top <= 100:
@@ -56,6 +64,8 @@ class Player:
     def draw(self, screen):
         ##Affichage du joueur
         screen.blit(self.image, self.rect)
+
+
 
 class Particle:
     ###############################
@@ -122,7 +132,7 @@ class health_bar :
 
     def augmente (self):
         if self.health < 170 :
-            self.health = self.health + 25
+            self.health = self.health + 35
         else :
             self.health = 200
             
@@ -151,14 +161,19 @@ class Star:
 
     def draw(self, screen):
         screen.blit(self.image2, self.area)
-#class Bonus :
- #   def __init__(self,x2,y2):
-  #      self.image_sablier = pygame.image.load("sablier.png")
-   #     self.sablier_rect = self.image_sablier.get_rect(x=x2,y=y2)
-    #    self.pos =[x2, y2]
-    
-    #def draw(self,screen):
-     #   screen.blit(self.image_sablier, self.sablier_rect)
+class Bonus :
+    def __init__(self,x2,y2):
+        self.image_sablier = pygame.image.load("bonus.png")
+        self.imgae_sablier = pygame.transform.scale(self.image_sablier, (50, 50))
+        self.sablier_rect = self.image_sablier.get_rect(x=x2,y=y2)
+        self.pos =[x2, y2]
+
+    def move (self, x):
+        self.sablier_rect.move_ip(0,x)
+        self.sablier_rect.move_ip(0,x)
+
+    def draw(self,screen):
+        screen.blit(self.image_sablier, self.sablier_rect)
         
 class Score:
     ##Le score
@@ -266,7 +281,8 @@ class Game:
                           aleatoire(screen.get_width(),self.screen.get_height())[1])
         self.star2 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],
                           aleatoire(screen.get_width(),self.screen.get_height())[1])
-        #self.sablier = Bonus(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
+        self.sablier = Bonus(aleatoire(screen.get_width(),self.screen.get_height())[0],
+                             aleatoire(screen.get_width(),self.screen.get_height())[1])
         ##On definit les positions initiales du joueur et de l'étoile
         #self.health_max = 200
         self.valscore = 0
@@ -296,6 +312,8 @@ class Game:
                           aleatoire(screen.get_width(), self.screen.get_height())[1])
         self.star2 = Star(aleatoire(screen.get_width(), self.screen.get_height())[0],
                           aleatoire(screen.get_width(), self.screen.get_height())[1])
+        self.sablier = Bonus(aleatoire(screen.get_width(), self.screen.get_height())[0],
+                             aleatoire(screen.get_width(), self.screen.get_height())[1])
         ##On definit les positions initiales du joueur et de l'étoile
         # self.health_max = 200
         self.valscore = 0
@@ -310,7 +328,6 @@ class Game:
                 self.running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.player.set_time(0.1)
-                #print ("coucou")
 
                 
             if event.type == pygame.MOUSEBUTTONUP:
@@ -322,7 +339,8 @@ class Game:
                     vitesseY = -100
                 self.player.vitesse[0] = vitesseX
                 self.player.vitesse[1] = vitesseY
-                self.player.set_time(0.2)
+                if not self.player.ralenti:
+                    self.player.set_time(0.2)
                 self.health_bar.health -= 15
 
                 # Souris en collision avec le bouton
@@ -365,24 +383,25 @@ class Game:
             self.valscore = self.valscore + 1
             self.highscore.update(self.valscore)
             ########################
+        if (self.sablier.sablier_rect.colliderect(self.player.rect)):
+            self.sablier = Bonus(-50,-50)
+            self.player.set_time(0.1)
+            self.player.ralenti = True
+            self.player.timer_ral = 500
+            ########################
         else :
             self.health_bar.decrease(self.is_playing)
             self.particleball.add_particles(self.player.rect.centerx,self.player.rect.centery) #---------------------------------
 
-        # Augmentation du score en fonction du score
-        if (self.score.valscore % 5 == 0 and self.health_bar.baisseOk):
-            self.health_bar.augment_baisse()
-            #Bonus.draw(self, self.screen)
-        if (self.score.valscore % 20 == 1):
-            self.health_bar.baisseOk = True
-
         #print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
         self.player.move()
+        self.player.set_ralenti()
         #print (self.player.plafond())
         #print (self.player.vitesse[1])
         if (self.player.plafond()):
             self.star1.move(-self.player.vitesse[1]//2)
             self.star2.move(-self.player.vitesse[1]//2)
+            self.sablier.move(-self.player.vitesse[1]//2)
             self.background.move(-self.player.vitesse[1]//2)
         if (self.player.sol()):
             #le joueur tombe tout en bas
@@ -392,12 +411,21 @@ class Game:
             self.is_playing = False
             self.gameover = True
 
+        # Augmentation du score en fonction du score
+        if (self.score.valscore % 20 == 0 and self.health_bar.baisseOk):
+            self.health_bar.augment_baisse()
+            self.sablier = Bonus(aleatoire(screen.get_width(), self.screen.get_height())[0],
+                                 aleatoire(screen.get_width(), self.screen.get_height())[1])
+        if (self.score.valscore % 20 == 1):
+            self.health_bar.baisseOk = True
+
 
     def display(self):
         #self.screen.fill("black")
         self.background.draw (self.screen)
         self.star1.draw(self.screen)
         self.star2.draw(self.screen)
+        self.sablier.draw(self.screen)
         self.player.draw(self.screen)
         self.health_bar.draw(self.health)
         self.highscore.draw(self.screen, False)
