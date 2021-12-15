@@ -40,6 +40,9 @@ class Player:
         if  self.rect.bottom > screen.get_height(): #bord bas
             self.vitesse[1] = 0
             self.rect.bottom = screen.get_height()
+            self.font = pygame.font.Font('freesansbold.ttf', 60)
+            self.end = self.font.render('GAME OVER', True, (0, 0, 0))
+            screen.blit(self.end, (15, 300))
 
     def set_time (self, time):
         self.dt = time
@@ -116,6 +119,7 @@ class health_bar :
         pygame.draw.rect(self.screen, back_bar_color, back_bar_position)
         pygame.draw.rect(self.screen, bar_color, bar_position)
         #print(bar_color,bar_position)
+
     def augmente (self):
         if self.health < 170 :
             self.health = self.health + 15
@@ -125,9 +129,8 @@ class health_bar :
     def decrease(self, is_playing):
         self.health = self.health - self.baisse
         if self.health < 0 :
-            self.font = pygame.font.Font('freesansbold.ttf', 60)
-            self.end = self.font.render('GAME OVER', True, (0,0,0))
-            screen.blit(self.end, (15, 300))
+
+            self.health = 0
 
     def augment_baisse(self):
         self.baisse += 0.1
@@ -209,7 +212,7 @@ class Game:
         self.background = Background()
         self.health = 200
         self.health_bar = health_bar(screen, self.health)
-        self.player = Player(200, 700)
+        self.player = Player(200, 650)
         self.star1 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
         self.star2 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
         ##On definit les positions initiales du joueur et de l'étoile
@@ -227,9 +230,7 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.player.set_time(0.1)
                 #print ("coucou")
-                #Souris en collision avec le bouton
-                if self.play_button_rect.collidepoint(event.pos):
-                    self.is_playing = True
+
                 
             if event.type == pygame.MOUSEBUTTONUP:
                 vitesseX = - (self.player.rect.centerx - pygame.mouse.get_pos()[0])/3
@@ -241,6 +242,11 @@ class Game:
                 self.player.vitesse[0] = vitesseX
                 self.player.vitesse[1] = vitesseY
                 self.player.set_time(0.2)
+                self.health_bar.health -= 15
+
+                # Souris en collision avec le bouton
+                if self.play_button_rect.collidepoint(event.pos):
+                    self.is_playing = True
 
         keys = pygame.key.get_pressed()
 
