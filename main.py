@@ -38,7 +38,6 @@ class Player:
         if self.rect.top < 100:   #bord haut
             self.rect.top = 100
 
-
     def set_time (self, time):
         self.dt = time
 
@@ -152,7 +151,15 @@ class Star:
 
     def draw(self, screen):
         screen.blit(self.image2, self.area)
-
+class Bonus :
+    def __init__(self,x2,y2):
+        self.image_sablier = pygame.image.load("sablier.png")
+        self.sablier_rect = self.image_sablier.get_rect(x=x2,y=y2)
+        self.pos =[x2, y2]
+    
+    def draw(self,screen):
+        screen.blit(self.image_sablier, self.sablier_rect)
+        
 class Score:
     ##Le score
     def __init__(self, valscore, screen):
@@ -177,9 +184,22 @@ class Score:
 
         screen.blit(self.scorerendered, self.scorerendered_rect)
 
+class Highscore:
+    ##Le score
+    def __init__(self, valmeilscore, screen):
+        self.font = pygame.font.Font('freesansbold.ttf', 22)
+        self.valmeilscore = valmeilscore
 
+    def update (self, valscore):
+        self.valscore = valscore
+        #print(self.valscore)
+        self.valmeilscore = newhighscore(self.valscore,"joueur1")
+        #print(self.valmeilscore)
 
-
+    def draw(self, screen):
+        self.scorerendered = self.font.render('meilleur score: ' + str(self.valmeilscore), True, (20,20,20) )
+        screen.blit(self.scorerendered, (20, 45))
+        
 class Background:
     def __init__(self):
         self.image1 = pygame.image.load("fond-nuage.png")
@@ -240,11 +260,13 @@ class Game:
         self.player = Player(200, 650)
         self.star1 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
         self.star2 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
+        self.sablier = Bonus(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
         ##On definit les positions initiales du joueur et de l'étoile
         #self.health_max = 200
         self.valscore = 0
         self.score = Score(self.valscore, screen)
-        ###############################################################
+        self.meilscore = newhighscore(self.valscore,"joueur1")
+        self.highscore = Highscore(self.meilscore, screen)
         self.particleball = Particle()
 
     def restart (self, screen):
@@ -313,19 +335,26 @@ class Game:
             self.star1 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[0],aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[1])
             self.health_bar.augmente()
             self.score.augmente()
-
+            ###################
+            self.valscore = self.valscore + 1
+            self.highscore.update(self.valscore)
+            ####################
         if (self.star2.area.colliderect(self.player.rect)):
             self.star2 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[0],aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[1])
             self.health_bar.augmente()
             self.score.augmente()
-            
+             ######################
+            self.valscore = self.valscore + 1
+            self.highscore.update(self.valscore)
+            ########################
         else :
             self.health_bar.decrease(self.is_playing)
             self.particleball.add_particles(self.player.rect.centerx,self.player.rect.centery) #---------------------------------
 
         # Augmentation du score en fonction du score
-        if (self.score.valscore % 20 == 0 and self.health_bar.baisseOk):
+        if (self.score.valscore % 5 == 0 and self.health_bar.baisseOk):
             self.health_bar.augment_baisse()
+            Bonus.draw(self, self.screen)
         if (self.score.valscore % 20 == 1):
             self.health_bar.baisseOk = True
 
@@ -353,6 +382,7 @@ class Game:
         self.star2.draw(self.screen)
         self.player.draw(self.screen)
         self.health_bar.draw(self.health)
+        self.highscore.draw(self.screen)
         self.score.draw(self.screen, False)
         self.health_bar.decrease(self.is_playing)
         self.particleball.emit()
