@@ -168,14 +168,14 @@ class Score:
         else :
             x = 300
             y = 30
-        self.scorerendered = self.font.render('score: ' + str(self.valscore), True, (250,250,250))
+        self.scorerendered = self.font.render('score: ' + str(self.valscore), True, (225,225,225))
         self.scorerendered_rect = self.scorerendered.get_rect(center=(x, y))
         screen.blit(self.scorerendered, self.scorerendered_rect)
 
 class Highscore:
     ##Le score
     def __init__(self, valmeilscore, screen):
-        self.font = pygame.font.Font('freesansbold.ttf', 22)
+        self.font = pygame.font.Font('freesansbold.ttf', 25)
         self.valmeilscore = valmeilscore
 
     def update (self, valscore):
@@ -183,10 +183,16 @@ class Highscore:
         #print(self.valscore)
         self.valmeilscore = newhighscore(self.valscore,"joueur1")
         #print(self.valmeilscore)
-
-    def draw(self, screen):
-        self.scorerendered = self.font.render('meilleur score: ' + str(self.valmeilscore), True, (20,20,20) )
-        screen.blit(self.scorerendered, (20, 45))
+    def draw(self, screen, menu):
+        if menu :
+            x = screen.get_width() // 2
+            y = 170
+        else :
+            x = 130
+            y = 55
+        self.scorerendered = self.font.render('meilleur score: ' + str(self.valmeilscore), True, (225,225,225))
+        self.scorerendered_rect = self.scorerendered.get_rect(center=(x, y ))
+        screen.blit(self.scorerendered, self.scorerendered_rect)
         
 class Background:
     def __init__(self):
@@ -215,6 +221,7 @@ class Home :
         screen.blit(self.banner, (0, 200))
         if is_score:
             self.score.draw(self.screen, True)
+            self.highscore.draw(self.screen, True)
             self.font = pygame.font.Font('freesansbold.ttf', 60)
             self.end = self.font.render('GAME OVER', True, (0, 0, 0))
             self.end_rect = self.end.get_rect(center=(screen.get_width()//2, 75))
@@ -365,7 +372,7 @@ class Game:
         self.star2.draw(self.screen)
         self.player.draw(self.screen)
         self.health_bar.draw(self.health)
-        self.highscore.draw(self.screen)
+        self.highscore.draw(self.screen, False)
         self.score.draw(self.screen, False)
         self.health_bar.decrease(self.is_playing)
         self.particleball.emit()
