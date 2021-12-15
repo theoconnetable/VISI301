@@ -177,10 +177,8 @@ class Score:
             x = 300
             y = 30
 
-        self.scorerendered = self.font.render('score: ' + str(self.valscore), True, (250,250,250))
+        self.scorerendered = self.font.render('score: ' + str(self.valscore), True, (250,0,0))
         self.scorerendered_rect = self.scorerendered.get_rect(center=(x, y))
-
-        pygame.draw.rect(screen, (200, 200, 200, 50), self.scorerendered.get_rect(center=(x,y)))
 
         screen.blit(self.scorerendered, self.scorerendered_rect)
 
@@ -258,8 +256,10 @@ class Game:
         self.health = 200
         self.health_bar = health_bar(screen, self.health)
         self.player = Player(200, 650)
-        self.star1 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
-        self.star2 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
+        self.star1 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],
+                          aleatoire(screen.get_width(),self.screen.get_height())[1])
+        self.star2 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],
+                          aleatoire(screen.get_width(),self.screen.get_height())[1])
         #self.sablier = Bonus(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
         ##On definit les positions initiales du joueur et de l'étoile
         #self.health_max = 200
@@ -328,11 +328,20 @@ class Game:
 
     def update(self):
         if (self.star1.area.bottom > self.screen.get_height()):
-            self.star1 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height() // 2)[0], aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height() // 2)[1])
+            self.star1 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(),
+                                        screen.get_height() // 2)[0],
+                              - aleatoire(screen.get_width() - self.star1.image2.get_width(),
+                                        screen.get_height() // 2)[1])
         if (self.star2.area.bottom > self.screen.get_height()):
-            self.star2 = Star(aleatoire(screen.get_width() - self.star2.image2.get_width(), screen.get_height() // 2)[0], aleatoire(screen.get_width() - self.star2.image2.get_width(), screen.get_height() // 2)[1])
+            self.star2 = Star(aleatoire(screen.get_width() - self.star2.image2.get_width(),
+                                        screen.get_height() // 2)[0],
+                              - aleatoire(screen.get_width() - self.star2.image2.get_width(),
+                                        screen.get_height() // 2)[1])
         if (self.star1.area.colliderect(self.player.rect)):
-            self.star1 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[0],aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[1])
+            self.star1 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(),
+                                        screen.get_height() // 2)[0],
+                              - aleatoire(screen.get_width() - self.star1.image2.get_width(),
+                                        screen.get_height() // 2)[1])
             self.health_bar.augmente()
             self.score.augmente()
             ###################
@@ -340,7 +349,10 @@ class Game:
             self.highscore.update(self.valscore)
             ####################
         if (self.star2.area.colliderect(self.player.rect)):
-            self.star2 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[0],aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[1])
+            self.star2 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(),
+                                        screen.get_height()//2)[0],
+                              - aleatoire(screen.get_width() - self.star1.image2.get_width(),
+                                        screen.get_height()//2)[1])
             self.health_bar.augmente()
             self.score.augmente()
              ######################
@@ -363,9 +375,9 @@ class Game:
         #print (self.player.plafond())
         #print (self.player.vitesse[1])
         if (self.player.plafond()):
-            self.star1.move(-self.player.vitesse[1])
-            self.star2.move(-self.player.vitesse[1])
-            self.background.move(-self.player.vitesse[1])
+            self.star1.move(-self.player.vitesse[1]//2)
+            self.star2.move(-self.player.vitesse[1]//2)
+            self.background.move(-self.player.vitesse[1]//2)
         if (self.player.sol()):
             #le joueur tombe tout en bas
             self.is_playing = False
