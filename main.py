@@ -122,7 +122,7 @@ class health_bar :
 
     def augmente (self):
         if self.health < 170 :
-            self.health = self.health + 15
+            self.health = self.health + 25
         else :
             self.health = 200
             
@@ -199,7 +199,7 @@ class Highscore:
         else :
             x = 130
             y = 55
-        self.scorerendered = self.font.render('meilleur score: ' + str(self.valmeilscore), True, (225,225,225))
+        self.scorerendered = self.font.render('meilleur score: ' + str(self.valmeilscore), True, (255,215,0))
         self.scorerendered_rect = self.scorerendered.get_rect(center=(x, y ))
         screen.blit(self.scorerendered, self.scorerendered_rect)
         
@@ -228,9 +228,9 @@ class Home :
         self.background.draw(self.screen)
         screen.blit(self.play_button, self.play_button_rect)
         screen.blit(self.banner, (0, 200))
+        self.highscore.draw(self.screen, True)
         if is_score:
             self.score.draw(self.screen, True)
-            self.highscore.draw(self.screen, True)
             self.font = pygame.font.Font('freesansbold.ttf', 60)
             self.end = self.font.render('GAME OVER', True, (0, 0, 0))
             self.end_rect = self.end.get_rect(center=(screen.get_width()//2, 75))
