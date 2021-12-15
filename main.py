@@ -37,12 +37,7 @@ class Player:
             self.rect.right = screen.get_width()
         if self.rect.top < 100:   #bord haut
             self.rect.top = 100
-        if  self.rect.bottom > screen.get_height(): #bord bas
-            self.vitesse[1] = 0
-            self.rect.bottom = screen.get_height()
-            self.font = pygame.font.Font('freesansbold.ttf', 60)
-            self.end = self.font.render('GAME OVER', True, (0, 0, 0))
-            screen.blit(self.end, (15, 300))
+
 
     def set_time (self, time):
         self.dt = time
@@ -50,6 +45,12 @@ class Player:
     def plafond (self) :
         res = False
         if self.rect.top <= 100:
+            res = True
+        return res
+
+    def sol (self) :
+        res = False
+        if self.rect.bottom > screen.get_height():
             res = True
         return res
 
@@ -161,9 +162,17 @@ class Score:
     def augmente (self):
         self.valscore = self.valscore + 1
 
-    def draw(self, screen):
-        self.scorerendered = self.font.render('score: ' + str(self.valscore), True, (255,255,255))
-        screen.blit(self.scorerendered, (250, 10))
+    def draw(self, screen, menu):
+        if menu :
+            x = screen.get_width() // 2
+            y = 135
+        else :
+            x = 300
+            y = 30
+        self.scorerendered = self.font.render('score: ' + str(self.valscore), True, (250,250,250))
+        self.scorerendered_rect = self.scorerendered.get_rect(center=(x, y))
+        screen.blit(self.scorerendered, self.scorerendered_rect)
+
 
 
 class Background:
@@ -187,12 +196,19 @@ class Background:
 
 class Home :
     # Ecran d'acceuil 
-    def display(self):
-        self.background.draw (self.screen)
-        screen.blit(self.play_button,self.play_button_rect) 
-        screen.blit(self.banner,(0,200)) 
+    def display(self,is_score):
+        self.background.draw(self.screen)
+        screen.blit(self.play_button, self.play_button_rect)
+        screen.blit(self.banner, (0, 200))
+        if is_score:
+            self.score.draw(self.screen, True)
+            self.font = pygame.font.Font('freesansbold.ttf', 60)
+            self.end = self.font.render('GAME OVER', True, (0, 0, 0))
+            self.end_rect = self.end.get_rect(center=(screen.get_width()//2, 75))
+            screen.blit(self.end, self.end_rect)
         pygame.display.flip()
         self.handling_events()
+
 
 class Game:
     ##Le jeu
@@ -203,6 +219,7 @@ class Game:
         self.running = True
         # Définir si le jeu à commencé
         self.is_playing = False
+        self.gameover = False
         self.play_button = pygame.image.load("Jouer.png")
         self.play_button = pygame.transform.scale(self.play_button,(350,150))
         self.play_button_rect = self.play_button.get_rect()
@@ -220,6 +237,34 @@ class Game:
         self.star2 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],aleatoire(screen.get_width(),self.screen.get_height())[1])
         ##On definit les positions initiales du joueur et de l'étoile
         #self.health_max = 200
+        self.valscore = 0
+        self.score = Score(self.valscore, screen)
+        ###############################################################
+        self.particleball = Particle()
+
+    def restart (self, screen):
+        #réinitialisation de la partie
+        self.running = True
+        # Définir si le jeu à commencé
+        self.play_button = pygame.image.load("Jouer.png")
+        self.play_button = pygame.transform.scale(self.play_button, (350, 150))
+        self.play_button_rect = self.play_button.get_rect()
+        self.play_button_rect.x = 25
+        self.play_button_rect.y = 300
+        self.banner = pygame.image.load("banner.png")
+        self.banner = pygame.transform.scale(self.banner, (400, 100))
+        self.clock = pygame.time.Clock()
+        ##########################################################################-----Ajout commentaires
+        self.background = Background()
+        self.health = 200
+        self.health_bar = health_bar(screen, self.health)
+        self.player = Player(200, 650)
+        self.star1 = Star(aleatoire(screen.get_width(), self.screen.get_height())[0],
+                          aleatoire(screen.get_width(), self.screen.get_height())[1])
+        self.star2 = Star(aleatoire(screen.get_width(), self.screen.get_height())[0],
+                          aleatoire(screen.get_width(), self.screen.get_height())[1])
+        ##On definit les positions initiales du joueur et de l'étoile
+        # self.health_max = 200
         self.valscore = 0
         self.score = Score(self.valscore, screen)
         ###############################################################
@@ -250,6 +295,7 @@ class Game:
                 # Souris en collision avec le bouton
                 if self.play_button_rect.collidepoint(event.pos):
                     self.is_playing = True
+                    self.restart(self.screen)
 
         keys = pygame.key.get_pressed()
 
@@ -286,6 +332,10 @@ class Game:
             self.star1.move(-self.player.vitesse[1])
             self.star2.move(-self.player.vitesse[1])
             self.background.move(-self.player.vitesse[1])
+        if (self.player.sol()):
+            #le joueur tombe tout en bas
+            self.is_playing = False
+            self.gameover = True
 
 
     def display(self):
@@ -295,7 +345,7 @@ class Game:
         self.star2.draw(self.screen)
         self.player.draw(self.screen)
         self.health_bar.draw(self.health)
-        self.score.draw(self.screen)
+        self.score.draw(self.screen, False)
         self.health_bar.decrease(self.is_playing)
         self.particleball.emit()
         pygame.display.flip()
@@ -306,13 +356,17 @@ class Game:
 
     def run(self):
         while self.running:
+            #print (self.gameover)
             if self.is_playing :
                 self.display()
                 self.handling_events()
                 self.update()
                 self.clock.tick(60)
             else :
-                Home.display(self)
+                if (self.gameover) :
+                    Home.display(self,True)
+                else :
+                    Home.display(self,False)
                 
 
 
