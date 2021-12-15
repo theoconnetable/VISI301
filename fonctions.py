@@ -1,3 +1,16 @@
+from random import *
+import pygame
+
+def aleatoire(max_width, max_height):
+    """Fonction qui permet d'avoir une position aléatoire"""
+    
+    x = randint(0,max_width)
+    y = randint(0,max_height)
+    
+    return (x,y)
+
+
+
 def newhighscore(score,nom):
     '''###########################################################'''
     f = open("highscore.txt")
@@ -10,15 +23,13 @@ def newhighscore(score,nom):
     ancienscore = ''
     for i in range(rang + 1,len(phrase)):
         ancienscore = ancienscore + phrase[i]
-    ancienscore = int(ancienscore)
     if score > int(ancienscore):
         newphrase = nom + ' :' + str(score)
         g = open("highscore.txt","w")
         g.write(newphrase)
         g.close()
-        return True
+        return str(score)
     else:
-        return False
+        return ancienscorescore
     
         ##remplace score
-    

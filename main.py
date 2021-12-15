@@ -1,6 +1,6 @@
 import pygame, random
-from aleatoire import aleatoire
-
+from fonctions import aleatoire
+from fonctions import newhighscore
 
 class Player:
     #Le joueur
