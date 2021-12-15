@@ -30,6 +30,6 @@ def newhighscore(score,nom):
         g.close()
         return str(score)
     else:
-        return ancienscorescore
+        return ancienscore
     
         ##remplace score

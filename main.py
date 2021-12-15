@@ -162,10 +162,25 @@ class Score:
         self.valscore = self.valscore + 1
 
     def draw(self, screen):
-        self.scorerendered = self.font.render('score: ' + str(self.valscore), True, (255,255,255))
-        screen.blit(self.scorerendered, (250, 10))
+        self.scorerendered = self.font.render('score: ' + str(self.valscore), True, (215,215,215))
+        screen.blit(self.scorerendered, (230, 10))
 
+class Highscore:
+    ##Le score
+    def __init__(self, valmeilscore, screen):
+        self.font = pygame.font.Font('freesansbold.ttf', 22)
+        self.valmeilscore = valmeilscore
 
+    def update (self, valscore):
+        self.valscore = valscore
+        #print(self.valscore)
+        self.valmeilscore = newhighscore(self.valscore,"joueur1")
+        #print(self.valmeilscore)
+
+    def draw(self, screen):
+        self.scorerendered = self.font.render('meilleur score: ' + str(self.valmeilscore), True, (20,20,20) )
+        screen.blit(self.scorerendered, (20, 45))
+        
 class Background:
     def __init__(self):
         self.image1 = pygame.image.load("fond-nuage.png")
@@ -222,7 +237,8 @@ class Game:
         #self.health_max = 200
         self.valscore = 0
         self.score = Score(self.valscore, screen)
-        ###############################################################
+        self.meilscore = newhighscore(self.valscore,"joueur1")
+        self.highscore = Highscore(self.meilscore, screen)
         self.particleball = Particle()
 
     def handling_events(self):
@@ -262,12 +278,18 @@ class Game:
             self.star1 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[0],aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[1])
             self.health_bar.augmente()
             self.score.augmente()
-
+            ###################
+            self.valscore = self.valscore + 1
+            self.highscore.update(self.valscore)
+            ####################
         if (self.star2.area.colliderect(self.player.rect)):
             self.star2 = Star(aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[0],aleatoire(screen.get_width() - self.star1.image2.get_width(), screen.get_height()//2)[1])
             self.health_bar.augmente()
             self.score.augmente()
-            
+             ######################
+            self.valscore = self.valscore + 1
+            self.highscore.update(self.valscore)
+            ########################
         else :
             self.health_bar.decrease(self.is_playing)
             self.particleball.add_particles(self.player.rect.centerx,self.player.rect.centery) #---------------------------------
@@ -296,6 +318,7 @@ class Game:
         self.player.draw(self.screen)
         self.health_bar.draw(self.health)
         self.score.draw(self.screen)
+        self.highscore.draw(self.screen)
         self.health_bar.decrease(self.is_playing)
         self.particleball.emit()
         pygame.display.flip()
