@@ -169,9 +169,14 @@ class Score:
         else :
             x = 300
             y = 30
+
         self.scorerendered = self.font.render('score: ' + str(self.valscore), True, (250,250,250))
         self.scorerendered_rect = self.scorerendered.get_rect(center=(x, y))
+
+        pygame.draw.rect(screen, (200, 200, 200, 50), self.scorerendered.get_rect(center=(x,y)))
+
         screen.blit(self.scorerendered, self.scorerendered_rect)
+
 
 
 
@@ -293,7 +298,7 @@ class Game:
                 self.health_bar.health -= 15
 
                 # Souris en collision avec le bouton
-                if self.play_button_rect.collidepoint(event.pos):
+                if (self.play_button_rect.collidepoint(event.pos) and not (self.is_playing)):
                     self.is_playing = True
                     self.restart(self.screen)
 
@@ -334,6 +339,9 @@ class Game:
             self.background.move(-self.player.vitesse[1])
         if (self.player.sol()):
             #le joueur tombe tout en bas
+            self.is_playing = False
+            self.gameover = True
+        if self.health_bar.health == 0 :
             self.is_playing = False
             self.gameover = True
 
