@@ -185,6 +185,18 @@ class Bonus :
 
     def draw(self,screen):
         screen.blit(self.image_sablier, self.sablier_rect)
+class BonusSante :
+    def __init__(self,x3,y3):
+        self.image_sante = pygame.image.load("sante.png")
+        self.imgae_sante = pygame.transform.scale(self.image_sante, (50, 50))
+        self.sante_rect = self.image_sante.get_rect(x=x3,y=y3)
+        self.pos =[x3, y3]
+
+    def move (self, x):
+        self.sante_rect.move_ip(0,x)
+
+    def draw(self,screen):
+        screen.blit(self.image_sante, self.sante_rect)
         
 class Score:
     ##Le score
@@ -293,6 +305,7 @@ class Game:
         self.star2 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],
                           aleatoire(screen.get_width(),self.screen.get_height())[1])
         self.sablier = Bonus(-50,-50)
+        self.sante = BonusSante(-50,-50)
         ##On definit les positions initiales du joueur et de l'étoile
         #self.health_max = 200
         self.valscore = 0
@@ -323,6 +336,7 @@ class Game:
         self.star2 = Star(aleatoire(screen.get_width(), self.screen.get_height())[0],
                           aleatoire(screen.get_width(), self.screen.get_height())[1])
         self.sablier = Bonus(-50,-50)
+        self.sante = BonusSante (-50,-50)
         ##On definit les positions initiales du joueur et de l'étoile
         # self.health_max = 200
         self.valscore = 0
@@ -399,6 +413,9 @@ class Game:
             self.player.timer_ral = 300
             self.health_bar.timer_ral = 300
             self.health_bar.baisse = self.health_bar.baisse/2
+        if (self.sante.sante_rect.colliderect(self.player.rect)):  #Restauration Sante
+            self.sante = BonusSante(-50, -50)
+            self.health_bar.health = 200
             ########################
         else :
             self.health_bar.decrease(self.is_playing)
@@ -414,6 +431,7 @@ class Game:
             self.star1.move(-self.player.vitesse[1]//2)
             self.star2.move(-self.player.vitesse[1]//2)
             self.sablier.move(-self.player.vitesse[1]//2)
+            self.sante.move(-self.player.vitesse[1]//2)
             self.background.move(-self.player.vitesse[1]//2)
         if (self.player.sol()):
             #le joueur tombe tout en bas
@@ -426,8 +444,11 @@ class Game:
         # Augmentation du score en fonction du score
         if (self.score.valscore % 20 == 0 and self.health_bar.baisseOk):
             self.health_bar.augment_baisse()
-            print ("augmente")
+            #print ("augmente")
             self.sablier = Bonus(aleatoire(screen.get_width(), self.screen.get_height())[0],
+                                 -50)
+        if (self.score.valscore % 30 == 0 and self.score.valscore != 0):
+            self.sante = BonusSante (aleatoire(screen.get_width(), self.screen.get_height())[0],
                                  -50)
         if (self.score.valscore % 20 == 1):
             self.health_bar.baisseOk = True
@@ -439,6 +460,7 @@ class Game:
         self.star1.draw(self.screen)
         self.star2.draw(self.screen)
         self.sablier.draw(self.screen)
+        self.sante.draw(self.screen)
         self.player.draw(self.screen)
         self.health_bar.draw(self.health)
         self.highscore.draw(self.screen, False)
@@ -459,8 +481,8 @@ class Game:
                 self.handling_events()
                 self.update()
                 self.clock.tick(60)
-                print (self.health_bar.health)
-                print (self.health_bar.baisse)
+                #print (self.health_bar.health)
+                #print (self.health_bar.baisse)
             else :
                 if (self.gameover) :
                     Home.display(self,True)
