@@ -33,7 +33,7 @@ Lorsque vous avez lancé le jeu vous devriez voir apparaitre un écran comme cel
 Il suffit de faire monter le balle vers le haut de l'écran pour que de nouvelles étoiles apparaissent.
 
 <h3>Crédits</h3>
-</br>CONNETABLE Theo (@theoconnetable)
+CONNETABLE Theo (@theoconnetable)
 </br>POLICASTRO Luca (@Kmarigou)
 </br>BOITOUZET Emilien (@Emilien39110)
 
