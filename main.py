@@ -112,8 +112,10 @@ class health_bar :
         self.play_button_rect = self.play_button.get_rect()
         self.play_button_rect.x = 25
         self.play_button_rect.y = 400
-        self.baisse = 0.1
+        self.baisse = 0.05
         self.baisseOk = False
+        self.timer_ral = -1
+        self.ralenti = False
 
     def draw(self, health):
         ##Couleur de la barre de vie + barre d'arrière plan
@@ -143,8 +145,18 @@ class health_bar :
             self.health = 0
 
     def augment_baisse(self):
-        self.baisse += 0.1
+        self.baisse += 0.05
         self.baisseOk = False
+
+    def set_ralenti (self):
+        if self.timer_ral > 0:
+            self.timer_ral -= 1
+        elif self.timer_ral == 0 :
+            self.timer_ral -= 1
+            self.baisse = self.baisse * 2
+            print ("ok")
+        else :
+            self.ralenti = False
 
 class Star:
     ##L'étoile
@@ -169,7 +181,6 @@ class Bonus :
         self.pos =[x2, y2]
 
     def move (self, x):
-        self.sablier_rect.move_ip(0,x)
         self.sablier_rect.move_ip(0,x)
 
     def draw(self,screen):
@@ -381,11 +392,13 @@ class Game:
             self.valscore = self.valscore + 1
             self.highscore.update(self.valscore)
             ########################
-        if (self.sablier.sablier_rect.colliderect(self.player.rect)):
+        if (self.sablier.sablier_rect.colliderect(self.player.rect)): #Temps ralenti
             self.sablier = Bonus(-50,-50)
-            self.player.set_time(0.1)
+            self.player.set_time(self.player.dt/2)
             self.player.ralenti = True
             self.player.timer_ral = 300
+            self.health_bar.timer_ral = 300
+            self.health_bar.baisse = self.health_bar.baisse/2
             ########################
         else :
             self.health_bar.decrease(self.is_playing)
@@ -394,6 +407,7 @@ class Game:
         #print ("star 1 ",self.star1.pos, "star 2 ",self.star2.pos, "width : ", self.star2.area.bottom, self.screen.get_height())
         self.player.move()
         self.player.set_ralenti()
+        self.health_bar.set_ralenti()
         #print (self.player.plafond())
         #print (self.player.vitesse[1])
         if (self.player.plafond()):
@@ -412,6 +426,7 @@ class Game:
         # Augmentation du score en fonction du score
         if (self.score.valscore % 20 == 0 and self.health_bar.baisseOk):
             self.health_bar.augment_baisse()
+            print ("augmente")
             self.sablier = Bonus(aleatoire(screen.get_width(), self.screen.get_height())[0],
                                  -50)
         if (self.score.valscore % 20 == 1):
@@ -444,6 +459,8 @@ class Game:
                 self.handling_events()
                 self.update()
                 self.clock.tick(60)
+                print (self.health_bar.health)
+                print (self.health_bar.baisse)
             else :
                 if (self.gameover) :
                     Home.display(self,True)
