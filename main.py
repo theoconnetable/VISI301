@@ -281,8 +281,7 @@ class Game:
                           aleatoire(screen.get_width(),self.screen.get_height())[1])
         self.star2 = Star(aleatoire(screen.get_width(),self.screen.get_height())[0],
                           aleatoire(screen.get_width(),self.screen.get_height())[1])
-        self.sablier = Bonus(aleatoire(screen.get_width(),self.screen.get_height())[0],
-                             aleatoire(screen.get_width(),self.screen.get_height())[1])
+        self.sablier = Bonus(-50,-50)
         ##On definit les positions initiales du joueur et de l'étoile
         #self.health_max = 200
         self.valscore = 0
@@ -312,8 +311,7 @@ class Game:
                           aleatoire(screen.get_width(), self.screen.get_height())[1])
         self.star2 = Star(aleatoire(screen.get_width(), self.screen.get_height())[0],
                           aleatoire(screen.get_width(), self.screen.get_height())[1])
-        self.sablier = Bonus(aleatoire(screen.get_width(), self.screen.get_height())[0],
-                             aleatoire(screen.get_width(), self.screen.get_height())[1])
+        self.sablier = Bonus(-50,-50)
         ##On definit les positions initiales du joueur et de l'étoile
         # self.health_max = 200
         self.valscore = 0
@@ -387,7 +385,7 @@ class Game:
             self.sablier = Bonus(-50,-50)
             self.player.set_time(0.1)
             self.player.ralenti = True
-            self.player.timer_ral = 500
+            self.player.timer_ral = 300
             ########################
         else :
             self.health_bar.decrease(self.is_playing)
@@ -415,7 +413,7 @@ class Game:
         if (self.score.valscore % 20 == 0 and self.health_bar.baisseOk):
             self.health_bar.augment_baisse()
             self.sablier = Bonus(aleatoire(screen.get_width(), self.screen.get_height())[0],
-                                 aleatoire(screen.get_width(), self.screen.get_height())[1])
+                                 -50)
         if (self.score.valscore % 20 == 1):
             self.health_bar.baisseOk = True
 
