@@ -26,4 +26,15 @@ Pour jouer à ce jeu il vous faut Python3.8 ainsi que la librairie "Pygame".
 Vous devez ensuite ouvrir le fichier ./main.py et l'exécuter. Une nouvelle fenêtre s'ouvre
 et vous découvrirez le menu du Jeu.
 
-![alt text](http://url/to/img.png)
+Lorsque vous avez lancé le jeu vous devriez voir apparaitre un écran comme celui-ci :
+
+![alt text](https://github.com/theoconnetable/VISI301/blob/main/read.png)
+
+Il suffit de faire monter le balle vers le haut de l'écran pour que de nouvelles étoiles apparaissent.
+
+<h3>Crédits</h3>
+CONNETABLE Theo (@theoconnetable)
+</br>POLICASTRO Luca (@Kmarigou)
+</br>BOITOUZET Emilien (@Emilien39110)
+
+Projet réalisé dans le cadre du module de VISI301, CMI-Info, USMB
